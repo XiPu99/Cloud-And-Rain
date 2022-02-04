@@ -16,13 +16,37 @@ public class GameManager : MonoBehaviour
     private int _playerScore;
     private int _computerScore;
 
+    public GameOver _gameOverScreen;
+    public GameObject _bounce;
+
+    public AudioSource _gameOverSound;
+    public AudioClip _gameOverSoundFile;
+
+    public AudioSource _scoreSound;
+    public AudioClip _scoreSoundFile;
+
     public void PlayerScores()
     {
         _playerScore++;
         this._playerScoreText.text = _playerScore.ToString();
         this._ballObject.AddStartingForce();
 
-        ResetRound();
+        if(_playerScore < 3)
+        {
+            _scoreSound.PlayOneShot(_scoreSoundFile);
+        }
+
+        if(_playerScore >= 3)
+        {
+            GameOver("You");
+            _bounce.SetActive(false);
+            _gameOverSound.PlayOneShot(_gameOverSoundFile);
+        }
+        else
+        {
+            ResetRound();
+        }
+
     }
 
     public void ComputerScores()
@@ -31,7 +55,21 @@ public class GameManager : MonoBehaviour
         this._computerScoreText.text = _computerScore.ToString();
         this._ballObject.AddStartingForce();
 
-        ResetRound();
+        if (_computerScore < 3)
+        {
+            _scoreSound.PlayOneShot(_scoreSoundFile);
+        }
+
+        if (_computerScore >= 3)
+        {
+            GameOver("Opponent");
+            _bounce.SetActive(false);
+            _gameOverSound.PlayOneShot(_gameOverSoundFile);
+        }
+        else
+        {
+            ResetRound();
+        }
     }
 
     public void ResetRound()
@@ -39,6 +77,11 @@ public class GameManager : MonoBehaviour
         this._ballObject.ResetPosition();
         this._playerPaddle.ResetPosition();
         this._computerPaddle.ResetPosition();
+    }
+
+    public void GameOver(string inputWinnerName)
+    {
+        _gameOverScreen.Setup(inputWinnerName);
     }
 
 }

@@ -6,6 +6,9 @@ public class BouncySurface : MonoBehaviour
 {
     public float bounceStrength;
 
+    public AudioSource _bounceSound;
+    public AudioClip _bounceSoundFile;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Ball ball = collision.gameObject.GetComponent<Ball>();
@@ -14,6 +17,7 @@ public class BouncySurface : MonoBehaviour
         {
             Vector2 normal = collision.GetContact(0).normal;
             ball.AddForceToBall(-1.0f * normal * this.bounceStrength);
+            _bounceSound.PlayOneShot(_bounceSoundFile);
         }
     }
 }
